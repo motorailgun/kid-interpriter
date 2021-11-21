@@ -102,6 +102,30 @@ describe('構文解析', () => {
       )
     })
   })
+  describe('引き算と足し算', () => {
+    test('1-2;', () => {
+      expect(parse(lex('1-2;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Substruct',
+          left: { type: 'IntLiteral', value: 1 },
+          right: { type: 'IntLiteral', value: 2 },
+        },
+      )
+    })
+    test('1+2-3;', () => {
+      expect(parse(lex('1+2-3;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Substruct',
+          left: {
+            type: 'Add',
+            left: { type: 'IntLiteral', value: 1 },
+            right: { type: 'IntLiteral', value: 2 },
+          },
+          right: { type: 'IntLiteral', value: 3 },
+        },
+      )
+    })
+  })
   test('変数', () => {
     expect(parse(lex('abc;')).partsOfSource[0]).toStrictEqual(
       { type: 'Variable', name: 'abc' },

@@ -20,13 +20,13 @@ describe('字句解析', () => {
     expect(lexicalAnalyse('==')).toStrictEqual([{ type: 'Identical' }])
   })
   test('-', () => {
-    expect(lexicalAnalyse('-').toStrictEqual([{ type: 'Minus' }]))
+    expect(lexicalAnalyse('-')).toStrictEqual([{ type: 'Minus' }])
   })
   test('*', () => {
-    expect(lexicalAnalyse('*').toStrictEqual([{ type: 'Multiply' }]))
+    expect(lexicalAnalyse('*')).toStrictEqual([{ type: 'Multiply' }])
   })
   test('/', () => {
-    expect(lexicalAnalyse('/').toStrictEqual([{ type: 'Devide' }]))
+    expect(lexicalAnalyse('/')).toStrictEqual([{ type: 'Devide' }])
   })
   test('1+2', () => {
     expect(lexicalAnalyse('1+2')).toStrictEqual([
