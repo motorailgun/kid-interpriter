@@ -5,7 +5,11 @@ function isDigit(char) {
 
 function isIdentChar(char) {
   const charCode = char.charCodeAt(0)
-  return 'a'.charCodeAt(0) <= charCode && charCode <= 'z'.charCodeAt(0)
+
+  const is_lowercase = 'a'.charCodeAt(0) <= charCode && charCode <= 'z'.charCodeAt(0)
+  const is_uppercase = 'A'.charCodeAt(0) <= charCode && charCode <= 'Z'.charCodeAt(0)
+  const is_underbar = charCode == '_'.charCodeAt(0)
+  return is_lowercase || is_uppercase || is_underbar
 }
 
 function countDigits(source) {
