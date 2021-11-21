@@ -40,23 +40,29 @@ module.exports.lexicalAnalyse = function (source) {
   while (readPosition < source.length) {
     switch (source[readPosition]) {
       case '=':
-        tokens.push({ type: 'Equal' })
-        readPosition += 1
+        if (tokens[tokens.length - 1]?.type === 'Equal' ) {
+          tokens.pop()
+          tokens.push({ type: 'Identical' })
+          readPosition += 1
+        }else{
+          tokens.push({ type: 'Equal' })
+          readPosition += 1
+        }
         break
       case '+':
         tokens.push({ type: 'Plus' })
         readPosition += 1
         break
       case '-':
-        tokens.push({ type: 'Minus'})
+        tokens.push({ type: 'Minus' })
         readPosition += 1
         break
       case '*':
-        tokens.push({ type: 'Multiply'})
+        tokens.push({ type: 'Multiply' })
         readPosition += 1
         break
       case '/':
-        tokens.push({ type: 'Devide'})
+        tokens.push({ type: 'Devide' })
         readPosition += 1
         break
       case '(':
