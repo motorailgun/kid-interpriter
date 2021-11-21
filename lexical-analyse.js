@@ -6,10 +6,10 @@ function isDigit(char) {
 function isIdentChar(char) {
   const charCode = char.charCodeAt(0)
 
-  const is_lowercase = 'a'.charCodeAt(0) <= charCode && charCode <= 'z'.charCodeAt(0)
-  const is_uppercase = 'A'.charCodeAt(0) <= charCode && charCode <= 'Z'.charCodeAt(0)
-  const is_underbar = charCode == '_'.charCodeAt(0)
-  return is_lowercase || is_uppercase || is_underbar
+  const isLowercase = 'a'.charCodeAt(0) <= charCode && charCode <= 'z'.charCodeAt(0)
+  const isUppercase = 'A'.charCodeAt(0) <= charCode && charCode <= 'Z'.charCodeAt(0)
+  const isUnderbar = charCode === '_'.charCodeAt(0)
+  return isLowercase || isUppercase || isUnderbar
 }
 
 function countDigits(source) {
@@ -43,7 +43,7 @@ module.exports.lexicalAnalyse = function (source) {
         if (source[readPosition + 1] === '=') {
           tokens.push({ type: 'Identical' })
           readPosition += 2
-        }else{
+        } else {
           tokens.push({ type: 'Equal' })
           readPosition += 1
         }
