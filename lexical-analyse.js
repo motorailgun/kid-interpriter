@@ -40,10 +40,9 @@ module.exports.lexicalAnalyse = function (source) {
   while (readPosition < source.length) {
     switch (source[readPosition]) {
       case '=':
-        if (tokens[tokens.length - 1]?.type === 'Equal' ) {
-          tokens.pop()
+        if (source[readPosition + 1] === '=') {
           tokens.push({ type: 'Identical' })
-          readPosition += 1
+          readPosition += 2
         }else{
           tokens.push({ type: 'Equal' })
           readPosition += 1
