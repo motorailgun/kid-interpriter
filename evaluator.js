@@ -1,4 +1,4 @@
-const { intValue, nullValue, boolValue } = require('./value')
+const { intValue, nullValue, boolValue, stringValue } = require('./value')
 
 function evaluatorError(ast) {
   return {
@@ -69,7 +69,7 @@ function evaluateAdd(ast, environment) {
   if (leftError) {
     return { error: leftError, environment }
   }
-  if (leftResult.type !== 'IntValue') {
+  if (leftResult.type !== 'IntValue' && leftResult.type !== 'StringValue') {
     return typeError(leftResult.type, environment)
   }
   const {
@@ -81,11 +81,11 @@ function evaluateAdd(ast, environment) {
   if (rightError) {
     return { error: rightError, environment: rightEnvironment }
   }
-  if (rightResult.type !== 'IntValue') {
+  if (leftResult.type !== rightResult.type) {
     return typeError(rightResult.type, environment)
   }
   return {
-    result: intValue(leftResult.value + rightResult.value),
+    result: (leftResult.type === 'IntValue' ?  intValue : stringValue)(leftResult.value + rightResult.value),
     environment: rightEnvironment,
   }
 }
@@ -319,6 +319,11 @@ function evaluate(ast, environment) {
       }
     case 'FuncCall':
       return evaluateFunctionCalling(ast, environment)
+    case 'StringLiteral':
+      return {
+        result: stringValue(ast.value),
+        environment,
+      }
     case 'IntLiteral':
       return {
         result: intValue(ast.value),
