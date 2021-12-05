@@ -53,7 +53,7 @@ module.exports.lexicalAnalyse = function (source) {
             readPosition += 1
             break
           }else{
-            str + source[readPosition]
+            str = str + source[readPosition]
             readPosition += 1
           }
         }
