@@ -2,6 +2,14 @@
 function parseLiteral(tokens) {
   const head = tokens[0]
   switch (head?.type) {
+    case 'String':
+      return {
+        expression: {
+          type: 'StringLiteral',
+          value: head.value,
+        },
+        parsedTokensCount: 1,
+      }
     case 'Int':
       return {
         expression: {
