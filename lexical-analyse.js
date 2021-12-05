@@ -41,6 +41,7 @@ module.exports.lexicalAnalyse = function (source) {
     switch (source[readPosition]) {
       case '"':
       { let str = ''
+        let escaped = false
         readPosition += 1
         while (true) {
           if (source.length === readPosition) {
@@ -49,11 +50,35 @@ module.exports.lexicalAnalyse = function (source) {
               value: `"${str}`,
             })
             break
-          } else if (source[readPosition] === '"') {
+          } else if (source[readPosition] === '"' && !escaped) {
             readPosition += 1
             break
           } else {
-            str += source[readPosition]
+            if (escaped) {
+              switch(source[readPosition]){
+                case '\\':
+                  str += '\\'
+                  break
+                case 'n':
+                  str += "\n"
+                  break
+                case 't':
+                  str += "\t"
+                  break
+                case '"':
+                  str += '"'
+                  break
+                default:
+                  str += "\\" + source[readPosition];
+              }
+              escaped = false
+            }else{
+              if(source[readPosition] === '\\'){
+                escaped = true
+              }else{
+                str += source[readPosition]
+              }
+            }
             readPosition += 1
           }
         }
