@@ -40,32 +40,32 @@ module.exports.lexicalAnalyse = function (source) {
   while (readPosition < source.length) {
     switch (source[readPosition]) {
       case '"':
-        str = ""
+      { let str = ''
         readPosition += 1
-        while(1){
-          if(source.length === readPosition){
+        while (true) {
+          if (source.length === readPosition) {
             tokens.push({
               type: 'UnknownCharacter',
-              value: '"' + str
+              value: `"${str}`,
             })
             break
-          }else if(source[readPosition] === '"'){
+          } else if (source[readPosition] === '"') {
             readPosition += 1
             break
-          }else{
-            str = str + source[readPosition]
+          } else {
+            str += source[readPosition]
             readPosition += 1
           }
         }
         tokens.push({
-            type: 'String',
-            value: str,
-          })
-        break
+          type: 'String',
+          value: str,
+        })
+        break }
       case '#':
         readPosition += 1
-        while (readPosition < source.length){
-          if (source[readPosition] != '\n') {
+        while (readPosition < source.length) {
+          if (source[readPosition] !== '\n') {
             readPosition += 1
           } else {
             readPosition += 1

@@ -34,6 +34,11 @@ describe('字句解析', () => {
       { type: 'Plus' },
       { type: 'Int', value: 2 }])
   })
+  test('文字列リテラル', () => {
+    expect(lexicalAnalyse('"koregamojiretsu"')).toStrictEqual([
+      { type: 'String', value: 'koregamojiretsu' }])
+  })
+  test('コメント', () => { expect(lexicalAnalyse('# asdfghjkl\\;:/][?+-=(')).toStrictEqual([]) })
   test('空白は無視する', () => {
     expect(lexicalAnalyse('\t 1 ')).toStrictEqual([{ type: 'Int', value: 1 }])
     expect(lexicalAnalyse('     ')).toStrictEqual([])
