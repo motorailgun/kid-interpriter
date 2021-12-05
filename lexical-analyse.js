@@ -40,24 +40,28 @@ module.exports.lexicalAnalyse = function (source) {
   while (readPosition < source.length) {
     switch (source[readPosition]) {
       case '"':
-      { let str = ''
+      { let str = ""
         let escaped = false
         readPosition += 1
         while (true) {
-          if (source.length === readPosition) {
+          if (source.length <= readPosition) {
             tokens.push({
               type: 'UnknownCharacter',
               value: `"${str}`,
             })
             break
           } else if (source[readPosition] === '"' && !escaped) {
-            readPosition += 1
+            tokens.push({
+              type: 'String',
+              value: str,
+            })
+            readPosition += 1 
             break
           } else {
             if (escaped) {
               switch(source[readPosition]){
-                case '\\':
-                  str += '\\'
+                case "\\":
+                  str += "\\"
                   break
                 case 'n':
                   str += "\n"
@@ -73,7 +77,7 @@ module.exports.lexicalAnalyse = function (source) {
               }
               escaped = false
             }else{
-              if(source[readPosition] === '\\'){
+              if(source[readPosition] === "\\"){
                 escaped = true
               }else{
                 str += source[readPosition]
@@ -82,10 +86,6 @@ module.exports.lexicalAnalyse = function (source) {
             readPosition += 1
           }
         }
-        tokens.push({
-          type: 'String',
-          value: str,
-        })
         break }
       case '#':
         readPosition += 1
