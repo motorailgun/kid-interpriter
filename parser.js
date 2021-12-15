@@ -127,12 +127,12 @@ function parseFunctionCallingExpression(tokens) {
 // 足し算と引き算の構文解析
 // 引き算は勉強会中で機能追加をする
 function parseAddSubExpression(tokens) {
-  let { expression: left, parsedTokensCount: readPosition } = parseFunctionCallingExpression(tokens)
+  let { expression: left, parsedTokensCount: readPosition } = parseMulDivExpression(tokens)
   while (tokens[readPosition]?.type === 'Plus' || tokens[readPosition]?.type === 'Minus') {
     const {
       expression: right,
       parsedTokensCount: rightTokensCount,
-    } = parseFunctionCallingExpression(tokens.slice(readPosition + 1))
+    } = parseMulDivExpression(tokens.slice(readPosition + 1))
     if (right === null) {
       return { expression: null }
     }
@@ -141,6 +141,23 @@ function parseAddSubExpression(tokens) {
   }
   return { expression: left, parsedTokensCount: readPosition }
 }
+
+function parseMulDivExpression(tokens) {
+  let { expression: left, parsedTokensCount: readPosition } = parseFunctionCallingExpression(tokens)
+  while (tokens[readPosition]?.type === 'Asterisk' || tokens[readPosition]?.type === 'Slash') {
+    const {
+      expression: right,
+      parsedTokensCount: rightTokensCount,
+    } = parseFunctionCallingExpression(tokens.slice(readPosition + 1))
+    if (right === null) {
+      return { expression: null }
+    }
+    left = { type: tokens[readPosition].type === 'Asterisk' ? 'Multiply' : 'Devide', left, right }
+    readPosition += rightTokensCount + 1
+  }
+  return { expression: left, parsedTokensCount: readPosition }
+}
+
 
 // 式の構文解析であることをわかりやすくするための関数
 // 足し算引き算よりも優先順位の低い式の構文を作ったときに書き換える
