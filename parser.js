@@ -124,14 +124,32 @@ function parseFunctionCallingExpression(tokens) {
   }
 }
 
+function parseUnaryOperatorExpression(tokens){
+  if (tokens[0]?.type === 'Plus' || tokens[0]?.type === 'Minus' ){
+    const{
+      expression: value,
+      parsedTokensCount: rightTokensCount,
+    } = parseFunctionCallingExpression(tokens.slice(1))
+
+    if (value === null) {
+      return { expression: null }
+    }
+
+    const exp = { type: tokens[0].type === 'Plus' ? 'Plus' : 'Minus', value }
+    return { expression: exp, parsedTokensCount: rightTokensCount + 1 }
+  } else {
+    return parseFunctionCallingExpression(tokens)
+  }
+}
+
 // 割り算と掛け算
 function parseMulDivExpression(tokens) {
-  let { expression: left, parsedTokensCount: readPosition } = parseFunctionCallingExpression(tokens)
+  let { expression: left, parsedTokensCount: readPosition } = parseUnaryOperatorExpression(tokens)
   while (tokens[readPosition]?.type === 'Asterisk' || tokens[readPosition]?.type === 'Slash') {
     const {
       expression: right,
       parsedTokensCount: rightTokensCount,
-    } = parseFunctionCallingExpression(tokens.slice(readPosition + 1))
+    } = parseUnaryOperatorExpression(tokens.slice(readPosition + 1))
     if (right === null) {
       return { expression: null }
     }
