@@ -40,7 +40,7 @@ module.exports.lexicalAnalyse = function (source) {
   while (readPosition < source.length) {
     switch (source[readPosition]) {
       case '"':
-      { let str = ""
+      { let str = ''
         let escaped = false
         readPosition += 1
         while (true) {
@@ -55,33 +55,31 @@ module.exports.lexicalAnalyse = function (source) {
               type: 'String',
               value: str,
             })
-            readPosition += 1 
+            readPosition += 1
             break
           } else {
             if (escaped) {
-              switch(source[readPosition]){
-                case "\\":
-                  str += "\\"
+              switch (source[readPosition]) {
+                case '\\':
+                  str += '\\'
                   break
                 case 'n':
-                  str += "\n"
+                  str += '\n'
                   break
                 case 't':
-                  str += "\t"
+                  str += '\t'
                   break
                 case '"':
                   str += '"'
                   break
                 default:
-                  str += "\\" + source[readPosition];
+                  str += `\\${source[readPosition]}`
               }
               escaped = false
-            }else{
-              if(source[readPosition] === "\\"){
-                escaped = true
-              }else{
-                str += source[readPosition]
-              }
+            } else if (source[readPosition] === '\\') {
+              escaped = true
+            } else {
+              str += source[readPosition]
             }
             readPosition += 1
           }

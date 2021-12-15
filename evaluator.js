@@ -1,4 +1,6 @@
-const { intValue, nullValue, boolValue, stringValue } = require('./value')
+const {
+  intValue, nullValue, boolValue, stringValue,
+} = require('./value')
 
 function evaluatorError(ast) {
   return {
@@ -85,7 +87,7 @@ function evaluateAdd(ast, environment) {
     return typeError(rightResult.type, environment)
   }
   return {
-    result: (leftResult.type === 'IntValue' ?  intValue : stringValue)(leftResult.value + rightResult.value),
+    result: (leftResult.type === 'IntValue' ? intValue : stringValue)(leftResult.value + rightResult.value),
     environment: rightEnvironment,
   }
 }

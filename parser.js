@@ -158,7 +158,6 @@ function parseMulDivExpression(tokens) {
   return { expression: left, parsedTokensCount: readPosition }
 }
 
-
 // 式の構文解析であることをわかりやすくするための関数
 // 足し算引き算よりも優先順位の低い式の構文を作ったときに書き換える
 function parseExpression(tokens) {

@@ -153,10 +153,12 @@ describe('構文解析', () => {
       expect(parse(lex('1+2*3;')).partsOfSource[0]).toStrictEqual(
         {
           type: 'Add',
-          left: { type: 'IntLiteral', value: 1},
-          right: { type: 'Multiply',
+          left: { type: 'IntLiteral', value: 1 },
+          right: {
+            type: 'Multiply',
             left: { type: 'IntLiteral', value: 2 },
-            right: { type: 'IntLiteral', value: 3 },},
+            right: { type: 'IntLiteral', value: 3 },
+          },
         },
       )
     })
@@ -164,12 +166,16 @@ describe('構文解析', () => {
       expect(parse(lex('(1+2)*(3+4);')).partsOfSource[0]).toStrictEqual(
         {
           type: 'Multiply',
-          left: { type: 'Add',
+          left: {
+            type: 'Add',
             left: { type: 'IntLiteral', value: 1 },
-            right: { type: 'IntLiteral', value: 2 },},
-          right: { type: 'Add',
+            right: { type: 'IntLiteral', value: 2 },
+          },
+          right: {
+            type: 'Add',
             left: { type: 'IntLiteral', value: 3 },
-            right: { type: 'IntLiteral', value: 4 },},
+            right: { type: 'IntLiteral', value: 4 },
+          },
         },
       )
     })
@@ -210,10 +216,12 @@ describe('構文解析', () => {
       expect(parse(lex('1+2/3;')).partsOfSource[0]).toStrictEqual(
         {
           type: 'Add',
-          left: { type: 'IntLiteral', value: 1},
-          right: { type: 'Devide',
+          left: { type: 'IntLiteral', value: 1 },
+          right: {
+            type: 'Devide',
             left: { type: 'IntLiteral', value: 2 },
-            right: { type: 'IntLiteral', value: 3 },},
+            right: { type: 'IntLiteral', value: 3 },
+          },
         },
       )
     })
@@ -221,12 +229,16 @@ describe('構文解析', () => {
       expect(parse(lex('(1+2)/(3+4);')).partsOfSource[0]).toStrictEqual(
         {
           type: 'Devide',
-          left: { type: 'Add',
+          left: {
+            type: 'Add',
             left: { type: 'IntLiteral', value: 1 },
-            right: { type: 'IntLiteral', value: 2 },},
-          right: { type: 'Add',
+            right: { type: 'IntLiteral', value: 2 },
+          },
+          right: {
+            type: 'Add',
             left: { type: 'IntLiteral', value: 3 },
-            right: { type: 'IntLiteral', value: 4 },},
+            right: { type: 'IntLiteral', value: 4 },
+          },
         },
       )
     })

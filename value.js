@@ -17,7 +17,7 @@ exports.boolValue = function (value) {
 }
 
 exports.stringValue = function (value) {
-  return{
+  return {
     type: 'StringValue',
     value,
   }
