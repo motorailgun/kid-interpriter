@@ -124,6 +124,23 @@ function parseFunctionCallingExpression(tokens) {
   }
 }
 
+// 割り算と掛け算
+function parseMulDivExpression(tokens) {
+  let { expression: left, parsedTokensCount: readPosition } = parseFunctionCallingExpression(tokens)
+  while (tokens[readPosition]?.type === 'Asterisk' || tokens[readPosition]?.type === 'Slash') {
+    const {
+      expression: right,
+      parsedTokensCount: rightTokensCount,
+    } = parseFunctionCallingExpression(tokens.slice(readPosition + 1))
+    if (right === null) {
+      return { expression: null }
+    }
+    left = { type: tokens[readPosition].type === 'Asterisk' ? 'Multiply' : 'Devide', left, right }
+    readPosition += rightTokensCount + 1
+  }
+  return { expression: left, parsedTokensCount: readPosition }
+}
+
 // 足し算と引き算の構文解析
 // 引き算は勉強会中で機能追加をする
 function parseAddSubExpression(tokens) {
@@ -137,22 +154,6 @@ function parseAddSubExpression(tokens) {
       return { expression: null }
     }
     left = { type: tokens[readPosition].type === 'Plus' ? 'Add' : 'Substruct', left, right }
-    readPosition += rightTokensCount + 1
-  }
-  return { expression: left, parsedTokensCount: readPosition }
-}
-
-function parseMulDivExpression(tokens) {
-  let { expression: left, parsedTokensCount: readPosition } = parseFunctionCallingExpression(tokens)
-  while (tokens[readPosition]?.type === 'Asterisk' || tokens[readPosition]?.type === 'Slash') {
-    const {
-      expression: right,
-      parsedTokensCount: rightTokensCount,
-    } = parseFunctionCallingExpression(tokens.slice(readPosition + 1))
-    if (right === null) {
-      return { expression: null }
-    }
-    left = { type: tokens[readPosition].type === 'Asterisk' ? 'Multiply' : 'Devide', left, right }
     readPosition += rightTokensCount + 1
   }
   return { expression: left, parsedTokensCount: readPosition }
