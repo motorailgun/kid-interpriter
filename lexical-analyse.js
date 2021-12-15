@@ -116,11 +116,11 @@ module.exports.lexicalAnalyse = function (source) {
         readPosition += 1
         break
       case '*':
-        tokens.push({ type: 'Multiply' })
+        tokens.push({ type: 'Asterisk' })
         readPosition += 1
         break
       case '/':
-        tokens.push({ type: 'Devide' })
+        tokens.push({ type: 'Slash' })
         readPosition += 1
         break
       case '(':
