@@ -126,6 +126,120 @@ describe('構文解析', () => {
       )
     })
   })
+  describe('掛け算', () => {
+    test('1*2;', () => {
+      expect(parse(lex('1*2;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Multiply',
+          left: { type: 'IntLiteral', value: 1 },
+          right: { type: 'IntLiteral', value: 2 },
+        },
+      )
+    })
+    test('1*2+3;', () => {
+      expect(parse(lex('1*2+3;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Add',
+          left: {
+            type: 'Multiply',
+            left: { type: 'IntLiteral', value: 1 },
+            right: { type: 'IntLiteral', value: 2 },
+          },
+          right: { type: 'IntLiteral', value: 3 },
+        },
+      )
+    })
+    test('1+2*3;', () => {
+      expect(parse(lex('1+2*3;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Add',
+          left: { type: 'IntLiteral', value: 1},
+          right: { type: 'Multiply',
+            left: { type: 'IntLiteral', value: 2 },
+            right: { type: 'IntLiteral', value: 3 },},
+        },
+      )
+    })
+    test('(1+2)*(3+4);', () => {
+      expect(parse(lex('(1+2)*(3+4);')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Multiply',
+          left: { type: 'Add',
+            left: { type: 'IntLiteral', value: 1 },
+            right: { type: 'IntLiteral', value: 2 },},
+          right: { type: 'Add',
+            left: { type: 'IntLiteral', value: 3 },
+            right: { type: 'IntLiteral', value: 4 },},
+        },
+      )
+    })
+    test('foo()*bar();', () => {
+      expect(parse(lex('foo()*bar();')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Multiply',
+          left: { type: 'FuncCall', name: 'foo', arguments: [] },
+          right: { type: 'FuncCall', name: 'bar', arguments: [] },
+        },
+      )
+    })
+  })
+  describe('割り算', () => {
+    test('1/2;', () => {
+      expect(parse(lex('1/2;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Devide',
+          left: { type: 'IntLiteral', value: 1 },
+          right: { type: 'IntLiteral', value: 2 },
+        },
+      )
+    })
+    test('1/2+3;', () => {
+      expect(parse(lex('1/2+3;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Add',
+          left: {
+            type: 'Devide',
+            left: { type: 'IntLiteral', value: 1 },
+            right: { type: 'IntLiteral', value: 2 },
+          },
+          right: { type: 'IntLiteral', value: 3 },
+        },
+      )
+    })
+    test('1+2/3;', () => {
+      expect(parse(lex('1+2/3;')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Add',
+          left: { type: 'IntLiteral', value: 1},
+          right: { type: 'Devide',
+            left: { type: 'IntLiteral', value: 2 },
+            right: { type: 'IntLiteral', value: 3 },},
+        },
+      )
+    })
+    test('(1+2)/(3+4);', () => {
+      expect(parse(lex('(1+2)/(3+4);')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Devide',
+          left: { type: 'Add',
+            left: { type: 'IntLiteral', value: 1 },
+            right: { type: 'IntLiteral', value: 2 },},
+          right: { type: 'Add',
+            left: { type: 'IntLiteral', value: 3 },
+            right: { type: 'IntLiteral', value: 4 },},
+        },
+      )
+    })
+    test('foo()/bar();', () => {
+      expect(parse(lex('foo()/bar();')).partsOfSource[0]).toStrictEqual(
+        {
+          type: 'Devide',
+          left: { type: 'FuncCall', name: 'foo', arguments: [] },
+          right: { type: 'FuncCall', name: 'bar', arguments: [] },
+        },
+      )
+    })
+  })
   test('変数', () => {
     expect(parse(lex('abc;')).partsOfSource[0]).toStrictEqual(
       { type: 'Variable', name: 'abc' },
