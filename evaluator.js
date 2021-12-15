@@ -67,7 +67,7 @@ function evaluateAdd(ast, environment) {
     // eslint-disable-next-line no-use-before-define
   } = evaluate(ast.left, environment)
   if (leftError) {
-    return { error: leftError, environment }
+    return { error: leftError }
   }
   if (leftResult.type !== 'IntValue' && leftResult.type !== 'StringValue') {
     return typeError(leftResult.type, environment)
@@ -102,7 +102,7 @@ function evaluateSubstruct(ast, environment) {
     return { error: leftError, environment }
   }
   if (leftResult.type !== 'IntValue') {
-    return typeError(leftResult.type, environment)
+    return typeError(leftResult.type)
   }
   const {
     result: rightResult,
@@ -111,10 +111,10 @@ function evaluateSubstruct(ast, environment) {
     // eslint-disable-next-line no-use-before-define
   } = evaluate(ast.right, leftEnvironment)
   if (rightError) {
-    return { error: rightError, environment: rightEnvironment }
+    return { error: rightError }
   }
   if (rightResult.type !== 'IntValue') {
-    return typeError(rightResult.type, environment)
+    return typeError(rightResult.type)
   }
   return {
     result: intValue(leftResult.value - rightResult.value),
@@ -195,10 +195,7 @@ function evaluateArguments(args, environment) {
     // eslint-disable-next-line no-use-before-define
     } = evaluate(stmt, argumentsEvaluatedEnvironment)
     if (argError) {
-      return {
-        error: argError,
-        environment: argEnvironment,
-      }
+      return { error: argError }
     }
     evaluatedArguments.push(argResult)
     argumentsEvaluatedEnvironment = argEnvironment
@@ -226,19 +223,13 @@ function evaluateFunctionCalling(calling, environment) {
     environment: argumentsEvaluatedEnvironment,
   } = evaluateArguments(args, environment)
   if (evaluatingArgumentsError) {
-    return {
-      error: evaluatingArgumentsError,
-      environment: argumentsEvaluatedEnvironment,
-    }
+    return { error: evaluatingArgumentsError }
   }
   const { result, error: computingFunctionError } = computeFunction(
     func, calling.name, evaluatedArguments, argumentsEvaluatedEnvironment,
   )
   if (computingFunctionError) {
-    return {
-      error: computingFunctionError,
-      environment: argumentsEvaluatedEnvironment,
-    }
+    return { error: computingFunctionError }
   }
   return {
     result,
@@ -280,7 +271,7 @@ function evaluateMultiAST(partsOfSource, environment) {
       // eslint-disable-next-line no-use-before-define
     } = evaluate(part, env)
     if (evaluatingError) {
-      return { error: evaluatingError, environment: evaluatedEnvironment }
+      return { error: evaluatingError }
     }
     result = evaluatedResult
     env = evaluatedEnvironment
