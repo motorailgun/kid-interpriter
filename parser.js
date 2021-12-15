@@ -124,9 +124,9 @@ function parseFunctionCallingExpression(tokens) {
   }
 }
 
-function parseUnaryOperatorExpression(tokens){
-  if (tokens[0]?.type === 'Minus' ){
-    const{
+function parseUnaryOperatorExpression(tokens) {
+  if (tokens[0]?.type === 'Minus') {
+    const {
       expression: value,
       parsedTokensCount: rightTokensCount,
     } = parseFunctionCallingExpression(tokens.slice(1))
@@ -137,15 +137,14 @@ function parseUnaryOperatorExpression(tokens){
 
     const exp = { type: 'Minus', value }
     return { expression: exp, parsedTokensCount: rightTokensCount + 1 }
-  } else if (tokens[0]?.type === 'Plus' ){
+  } if (tokens[0]?.type === 'Plus') {
     const {
       expression: exp,
       parsedTokensCount: rightTokensCount,
     } = parseFunctionCallingExpression(tokens.slice(1))
     return { expression: exp, parsedTokensCount: rightTokensCount + 1 }
-  } else {
-    return parseFunctionCallingExpression(tokens)
   }
+  return parseFunctionCallingExpression(tokens)
 }
 
 // 割り算と掛け算
