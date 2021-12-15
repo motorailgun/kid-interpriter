@@ -125,7 +125,7 @@ function parseFunctionCallingExpression(tokens) {
 }
 
 function parseUnaryOperatorExpression(tokens){
-  if (tokens[0]?.type === 'Plus' || tokens[0]?.type === 'Minus' ){
+  if (tokens[0]?.type === 'Minus' ){
     const{
       expression: value,
       parsedTokensCount: rightTokensCount,
@@ -135,7 +135,13 @@ function parseUnaryOperatorExpression(tokens){
       return { expression: null }
     }
 
-    const exp = { type: tokens[0].type === 'Plus' ? 'Plus' : 'Minus', value }
+    const exp = { type: 'Minus', value }
+    return { expression: exp, parsedTokensCount: rightTokensCount + 1 }
+  } else if (tokens[0]?.type === 'Plus' ){
+    const {
+      expression: exp,
+      parsedTokensCount: rightTokensCount,
+    } = parseFunctionCallingExpression(tokens.slice(1))
     return { expression: exp, parsedTokensCount: rightTokensCount + 1 }
   } else {
     return parseFunctionCallingExpression(tokens)
