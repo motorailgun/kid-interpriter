@@ -169,7 +169,7 @@ module.exports.lexicalAnalyse = function (source) {
               break
             case 'else':
               tokens.push({
-                type: 'else',
+                type: 'Else',
               })
               break
             case 'def':
