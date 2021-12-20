@@ -41,7 +41,7 @@ function undefinedFunctionError(name) {
 
 // if文の評価をする
 function evaluateIfStatement(ast, initialEnvironment) {
-  const { condition, statements } = ast
+  const { condition, ifStatements, elseStatements } = ast
   // eslint-disable-next-line no-use-before-define
   const { result, error, environment: halfwayEnvironment } = evaluate(condition, initialEnvironment)
   if (error) {
@@ -51,13 +51,10 @@ function evaluateIfStatement(ast, initialEnvironment) {
     }
   }
   if ((result.type === 'BoolValue' && result.value === false) || result.type === 'NullValue') {
-    return {
-      result: nullValue,
-      environment: halfwayEnvironment,
-    }
+    return evaluateMultiAST(elseStatements, halfwayEnvironment)
   }
   // eslint-disable-next-line no-use-before-define
-  return evaluateMultiAST(statements, halfwayEnvironment)
+  return evaluateMultiAST(ifStatements, halfwayEnvironment)
 }
 
 // 足し算の評価をする
