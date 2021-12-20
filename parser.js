@@ -239,13 +239,41 @@ function parseIfStatement(tokens) {
   if (!statements) {
     return { ifStatement: null }
   }
-  return {
-    ifStatement: {
-      type: 'If',
-      condition,
-      statements,
-    },
-    parsedTokensCount: parsedExpressionTokensCount + parsedBlockTokensCount + 3,
+  if (tokens[parsedExpressionTokensCount + parsedBlockTokensCount + 3]?.type !== 'Else'){
+    return {
+      ifStatement: {
+        type: 'If',
+        condition,
+        statements,
+      },
+      elseStatement: null,
+      parsedTokensCount: parsedExpressionTokensCount + parsedBlockTokensCount + 3,
+    }
+  }else{
+    const baseExpressionCount = parsedExpressionTokensCount + parsedBlockTokensCount + 3
+    if (tokens[baseExpressionCount + 1]?.type !== 'LBrace'){
+      return { ifStatement: null }
+    }
+    const {
+      statements: elseStatements,
+      parsedTokensCount: parsedElseBlockTokensCount,
+    } = parseBlock(tokens.slice(baseExpressionCount + 1))
+    if (!elseStatements) {
+      return { ifStatement: null }
+    }
+
+    return {
+      ifStatement: {
+        type: 'If',
+        condition,
+        statements,
+      },
+      elseStatement: {
+        type: 'Else',
+        elseStatements,
+      },
+      parsedTokensCount: baseExpressionCount + parsedElseBlockTokensCount + 1,
+    }
   }
 }
 
@@ -287,10 +315,18 @@ function parseStatement(tokens) {
       parsedTokensCount: parsedAssignmentTokensCount + 1,
     }
   }
-  const { ifStatement, parsedTokensCount: parsedIfTokensCount } = parseIfStatement(tokens)
-  if (ifStatement) {
+  const { ifStatement, elseStatement, parsedTokensCount: parsedIfTokensCount } = parseIfStatement(tokens)
+  if (ifStatement && !elseStatement) {
     return {
       statement: ifStatement,
+      parsedTokensCount: parsedIfTokensCount,
+    }
+  }else if(elseStatement){
+    return {
+      statement: {
+        ifStatement,
+        elseStatement,
+      },
       parsedTokensCount: parsedIfTokensCount,
     }
   }
