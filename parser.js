@@ -236,7 +236,7 @@ function parseIfStatement(tokens) {
     statements: ifStatements,
     parsedTokensCount: parsedBlockTokensCount,
   } = parseBlock(tokens.slice(parsedExpressionTokensCount + 3))
-  if (!statements) {
+  if (!ifStatements) {
     return { ifStatement: null }
   }
   if (tokens[parsedExpressionTokensCount + parsedBlockTokensCount + 3]?.type !== 'Else'){
