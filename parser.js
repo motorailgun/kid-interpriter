@@ -233,7 +233,7 @@ function parseIfStatement(tokens) {
     return { ifStatement: null }
   }
   const {
-    statements,
+    statements: ifStatements,
     parsedTokensCount: parsedBlockTokensCount,
   } = parseBlock(tokens.slice(parsedExpressionTokensCount + 3))
   if (!statements) {
@@ -244,9 +244,9 @@ function parseIfStatement(tokens) {
       ifStatement: {
         type: 'If',
         condition,
-        statements,
+        ifStatements: ifStatements,
+        elseStatements: null,
       },
-      elseStatement: null,
       parsedTokensCount: parsedExpressionTokensCount + parsedBlockTokensCount + 3,
     }
   }else{
@@ -266,11 +266,8 @@ function parseIfStatement(tokens) {
       ifStatement: {
         type: 'If',
         condition,
-        statements,
-      },
-      elseStatement: {
-        type: 'Else',
-        elseStatements,
+        ifStatements: ifStatements,
+        elseStatements: elseStatements,
       },
       parsedTokensCount: baseExpressionCount + parsedElseBlockTokensCount + 1,
     }
@@ -315,18 +312,10 @@ function parseStatement(tokens) {
       parsedTokensCount: parsedAssignmentTokensCount + 1,
     }
   }
-  const { ifStatement, elseStatement, parsedTokensCount: parsedIfTokensCount } = parseIfStatement(tokens)
-  if (ifStatement && !elseStatement) {
+  const { ifStatement, parsedTokensCount: parsedIfTokensCount } = parseIfStatement(tokens)
+  if (ifStatement) {
     return {
       statement: ifStatement,
-      parsedTokensCount: parsedIfTokensCount,
-    }
-  }else if(elseStatement){
-    return {
-      statement: {
-        ifStatement,
-        elseStatement,
-      },
       parsedTokensCount: parsedIfTokensCount,
     }
   }
